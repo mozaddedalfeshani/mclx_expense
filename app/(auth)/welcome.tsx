@@ -6,17 +6,24 @@ import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Button from "@/components/Button";
-
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 const Welcome = () => {
+  const router = useRouter();
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         {/* login button and welcome image */}
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => {
+            router.push("/(auth)/Login");
+          }}>
           <Typo fontWeight={500}>Sign in</Typo>
         </TouchableOpacity>
         {/* welcome image  */}
-        <Image
+        <Animated.Image
+          entering={FadeIn.delay(1000)}
           resizeMode="contain"
           style={styles.welcomeImage}
           source={require("../../assets/images/welcome.png")}
@@ -24,20 +31,28 @@ const Welcome = () => {
 
         {/* footer */}
         <View style={styles.footer}>
-          <View style={{ alignItems: "center" }}>
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify().damping(12)}
+            style={{ alignItems: "center" }}>
             <Typo fontWeight={400}>Welcome to</Typo>
             <Typo fontWeight={300}>
               <Typo fontWeight={900}>MCLX</Typo> Expense Tracker{" "}
               <AntDesign name="doubleright" size={17} />
             </Typo>
-          </View>
-          <View style={styles.buttonContainer}>
+          </Animated.View>
+
+          {/* get started button */}
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify().damping(12)}
+            style={styles.buttonContainer}>
             <Button onPress={() => {}}>
               <Typo size={22} color={colors.neutral900} fontWeight={600}>
                 Get Started
               </Typo>
             </Button>
-          </View>
+          </Animated.View>
+
+          {/* login button */}
         </View>
       </View>
     </ScreenWrapper>
