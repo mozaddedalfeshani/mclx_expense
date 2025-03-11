@@ -2,13 +2,20 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
-import { ScreenContentWrapper } from "react-native-screens";
 import Typo from "@/components/Typo";
 import BackButton from "@/components/BackButton";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Input from "@/components/Input";
+import * as Icon from "phosphor-react-native";
+import Button from "@/components/Button";
 
 const Login = () => {
+  // we are using ref instead of useState coz while uesr typing we dont want to re-render the component
+  const emailRef = React.useRef("");
+  const passwordRef = React.useRef("");
+  const handleSubmit = () => {
+    console.log(emailRef.current, passwordRef.current);
+  };
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -25,7 +32,27 @@ const Login = () => {
           <Typo size={16} color={colors.textLighter}>
             Login now for track your all expenses
           </Typo>
-          <Input />
+          <Input
+            onChangeText={(value) => (emailRef.current = value)}
+            placeholder="Enter Your Email"
+            icon={<Icon.At size={24} color={colors.white} />}
+          />
+          <Input
+            secureTextEntry={true}
+            onChangeText={(value) => (passwordRef.current = value)}
+            placeholder="Enter Your Password"
+            icon={<Icon.Password size={24} color={colors.white} />}
+          />
+
+          <Typo size={14} style={styles.forgotPassword}>
+            Forgot Password?
+          </Typo>
+
+          <Button onPress={handleSubmit}>
+            <Typo size={16} fontWeight={"bold"}>
+              Login
+            </Typo>
+          </Button>
         </View>
       </View>
     </ScreenWrapper>
