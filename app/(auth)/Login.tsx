@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
@@ -8,14 +8,18 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import Input from "@/components/Input";
 import * as Icon from "phosphor-react-native";
 import Button from "@/components/Button";
+import { useRouter } from "expo-router";
 
 const Login = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   // we are using ref instead of useState coz while uesr typing we dont want to re-render the component
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
   const handleSubmit = async () => {
+    setIsLoading(true);
     console.log(emailRef.current, passwordRef.current);
+    setIsLoading(false);
   };
   return (
     <ScreenWrapper>
@@ -54,6 +58,21 @@ const Login = () => {
               Login
             </Typo>
           </Button>
+        </View>
+
+        {/* footer section */}
+        <View style={styles.footer}>
+          <Typo size={15} style={styles.footerText}>
+            Don't have an account?
+          </Typo>
+          <Pressable
+            onPress={() => {
+              router.push("/Register");
+            }}>
+            <Typo size={15} fontWeight={"bold"}>
+              Sign Up
+            </Typo>
+          </Pressable>
         </View>
       </View>
     </ScreenWrapper>
