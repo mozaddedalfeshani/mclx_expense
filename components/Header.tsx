@@ -6,16 +6,9 @@ import { colors } from "@/constants/theme";
 
 const Header = ({ title = "", leftIcon, style }: HeaderProps) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
-      <Typo
-        style={{
-          width: leftIcon ? "80%" : "100%",
-          alignItems: "center",
-          textAlign: "center",
-        }}
-        color={colors.white}
-        size={22}>
+      <Typo style={styles.title} color={colors.white} size={22}>
         {title}
       </Typo>
     </View>
@@ -33,6 +26,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   leftIcon: {
-    alignSelf: "flex-start",
+    marginRight: 10, // Add some space between the icon and the title
+  },
+  title: {
+    flex: 1,
+    textAlign: "center",
   },
 });
