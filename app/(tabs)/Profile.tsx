@@ -9,9 +9,11 @@ import { useAuth } from "@/context/AuthContext";
 import { Image } from "expo-image";
 import { GetProfileImage } from "@/services/getProfileImage";
 import * as Icon from "phosphor-react-native";
-import { accountOptionType } from "@/types";
+
 import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase";
+
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -85,7 +87,12 @@ const Profile = () => {
         <View style={styles.accountOptions}>
           {accountOptions.map((item, index: number) => {
             return (
-              <View style={styles.listItem} key={index}>
+              <Animated.View
+                entering={FadeInDown.delay(index * 100)
+                  .springify()
+                  .damping(15)}
+                style={styles.listItem}
+                key={index}>
                 <TouchableOpacity
                   style={styles.flexRow}
                   onPress={item.runFunction}>
@@ -101,8 +108,13 @@ const Profile = () => {
                   <Typo size={16} style={{ flex: 1 }} fontWeight={600}>
                     {item.title}
                   </Typo>
+                  {item.title === "Logout" ? (
+                    ""
+                  ) : (
+                    <Icon.CaretRight size={24} color={colors.neutral500} />
+                  )}
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             );
           })}
         </View>
