@@ -15,8 +15,11 @@ import { auth } from "@/config/firebase";
 
 import Animated, { FadeInDown } from "react-native-reanimated";
 
+import { useRouter } from "expo-router";
+
 const Profile = () => {
   const { user } = useAuth();
+  const router = useRouter();
 
   const accountOptions = [
     {
@@ -25,7 +28,7 @@ const Profile = () => {
       bgColor: "#c264f5",
       routeName: "(modals)/EditProfile",
       runFunction: () => {
-        Alert.alert("Notice", "Comming soon...");
+        router.push("/(modals)/EditProfile");
       },
     },
     {
@@ -52,7 +55,14 @@ const Profile = () => {
       bgColor: "#f64e60",
       // routeName: "(modals)/EditProfile",
       runFunction: () => {
-        signOut(auth);
+        Alert.alert("Notice", "Do you want to logout ?", [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "Ok", onPress: () => signOut(auth) },
+        ]);
       },
     },
   ];
