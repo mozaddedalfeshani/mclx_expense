@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
@@ -8,9 +8,52 @@ import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import { Image } from "expo-image";
 import { GetProfileImage } from "@/services/getProfileImage";
+import * as Icon from "phosphor-react-native";
+import { accountOptionType } from "@/types";
+import { signOut } from "firebase/auth";
+import { auth } from "@/config/firebase";
 
 const Profile = () => {
   const { user } = useAuth();
+
+  const accountOptions = [
+    {
+      title: "Edit Profile",
+      icon: <Icon.User size={24} color={colors.white} weight="fill" />,
+      bgColor: "#c264f5",
+      routeName: "(modals)/EditProfile",
+      runFunction: () => {
+        Alert.alert("Notice", "Comming soon...");
+      },
+    },
+    {
+      title: "Setting",
+      icon: <Icon.Gear size={24} color={colors.white} weight="fill" />,
+      bgColor: "#f5a623",
+      // routeName: "(modals)/EditProfile",
+      runFunction: () => {
+        Alert.alert("Notice", "Comming soon...");
+      },
+    },
+    {
+      title: "Privacy and policy",
+      icon: <Icon.Lock size={24} color={colors.white} weight="fill" />,
+      bgColor: "#2cb9b0",
+      // routeName: "(modals)/EditProfile",
+      runFunction: () => {
+        Alert.alert("Notice", "Comming soon...");
+      },
+    },
+    {
+      title: "Logout",
+      icon: <Icon.Power size={24} color={colors.white} weight="fill" />,
+      bgColor: "#f64e60",
+      // routeName: "(modals)/EditProfile",
+      runFunction: () => {
+        signOut(auth);
+      },
+    },
+  ];
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -27,16 +70,46 @@ const Profile = () => {
               style={styles.avatar}
             />
           </View>
-
           {/* Name and email show*/}
           <View style={styles.nameContainer}>
             <Typo size={24} color={colors.neutral100} fontWeight={600}>
               {user?.name}
             </Typo>
-            <Typo size={15} color={colors.neutral800} fontWeight={600}>
+            <Typo size={15} color={colors.neutral500} fontWeight={100}>
               {user?.email}
             </Typo>
           </View>
+        </View>
+
+        {/* Account options */}
+        <View style={styles.accountOptions}>
+          {accountOptions.map((item, index: number) => {
+            return (
+              <View style={styles.listItem} key={index}>
+                <TouchableOpacity
+                  style={styles.flexRow}
+                  onPress={item.runFunction}>
+                  <View
+                    style={[
+                      styles.listIcon,
+                      {
+                        backgroundColor: item?.bgColor,
+                      },
+                    ]}>
+                    {item.icon}
+                  </View>
+                  <Typo size={16} style={{ flex: 1 }} fontWeight={600}>
+                    {item.title}
+                  </Typo>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
+        <View>
+          <Typo style={{ textAlign: "center", color: "#2d2d2e" }}>
+            Made by Muradian
+          </Typo>
         </View>
       </View>
     </ScreenWrapper>
