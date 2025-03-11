@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
@@ -17,9 +17,10 @@ const Login = () => {
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
   const handleSubmit = async () => {
-    setIsLoading(true);
-    console.log(emailRef.current, passwordRef.current);
-    setIsLoading(false);
+    if (!emailRef.current || !passwordRef.current) {
+      Alert.alert("Login", "Please fill all the fields");
+      return;
+    }
   };
   return (
     <ScreenWrapper>
@@ -54,7 +55,7 @@ const Login = () => {
           </Typo>
 
           <Button onPress={handleSubmit} loading={isLoading}>
-            <Typo size={16} fontWeight={"bold"}>
+            <Typo size={16} fontWeight={"bold"} color={colors.black}>
               Login
             </Typo>
           </Button>
@@ -67,9 +68,9 @@ const Login = () => {
           </Typo>
           <Pressable
             onPress={() => {
-              router.push("/Register");
+              router.navigate("/Register");
             }}>
-            <Typo size={15} fontWeight={"bold"}>
+            <Typo size={15} color={colors.primary} fontWeight={"bold"}>
               Sign Up
             </Typo>
           </Pressable>
