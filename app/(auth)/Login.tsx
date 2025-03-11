@@ -10,10 +10,11 @@ import * as Icon from "phosphor-react-native";
 import Button from "@/components/Button";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   // we are using ref instead of useState coz while uesr typing we dont want to re-render the component
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(emailRef.current, passwordRef.current);
   };
   return (
@@ -48,7 +49,7 @@ const Login = () => {
             Forgot Password?
           </Typo>
 
-          <Button onPress={handleSubmit}>
+          <Button onPress={handleSubmit} loading={isLoading}>
             <Typo size={16} fontWeight={"bold"}>
               Login
             </Typo>
