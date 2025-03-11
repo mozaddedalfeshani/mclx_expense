@@ -23,6 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       console.log("user", user);
       if (user) {
         setUser({ uid: user.uid, email: user.email, name: user.displayName });
+        updateUserData(user.uid);
         router.replace("/(tabs)");
       } else {
         setUser(null);
@@ -53,6 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // (auth/wrong-password)
       if (err.code === "auth/wrong-password") {
         msg = "Invalid password";
+      } else {
+        msg = "Something went wrong, please try again";
       }
 
       return { success: false, msg };
@@ -74,7 +77,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return { success: true };
     } catch (err: any) {
       let msg = err.message;
-      return { success: false, msg };
+      if (err.code === "auth/email-already-in-use") {
+        return { success: false, msg: "Email already in use" };
+      } else if (err.code === "auth/weak-password") {
+        return {
+          success: false,
+          msg: "Password should be at least 6 characters",
+        };
+      } else if (err.code === "auth/invalid-email") {
+        return {
+          success: false,
+          msg: "Invalid email address",
+        };
+      } else return { success: false, msg };
     }
   };
 
@@ -93,7 +108,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
       setUser({ ...user });
-    } catch (err: any) {}
+    } catch (err: any) {
+      console.log("error", err);
+    }
   };
 
   const contextValue: AuthContextType = {
