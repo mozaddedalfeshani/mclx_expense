@@ -76,6 +76,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 // below function is used to get the context value in the component file
+// below function is hook thats means we don't need to wrap the component with AuthProvider just use this hook
+// to get the context value
 export const useAuth = (): AuthContextType => {
   const context = React.useContext(AuthContext);
   if (!context) {

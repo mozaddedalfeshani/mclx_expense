@@ -46,7 +46,10 @@ const Welcome = () => {
           <Animated.View
             entering={FadeInDown.duration(1000).springify().damping(12)}
             style={styles.buttonContainer}>
-            <Button onPress={() => {}}>
+            <Button
+              onPress={() => {
+                router.push("/(auth)/Register");
+              }}>
               <Typo size={22} color={colors.neutral900} fontWeight={600}>
                 Get Started
               </Typo>
