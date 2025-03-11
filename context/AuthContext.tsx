@@ -1,11 +1,12 @@
 import { auth, firestore } from "@/config/firebase";
 import { AuthContextType, UserType } from "@/types";
+import { useRouter } from "expo-router";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -13,6 +14,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<UserType>(null);
+
+  const router = useRouter();
+  // use firebase auto check user login or not
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser({ uid: user.uid, email: user.email, name: user.displayName });
+        router.replace("/(tabs)");
+      } else {
+        setUser(null);
+        router.replace("/(auth)/welcome");
+      }
+    });
+
+    // if user is login then update the user data clear the state instant of waiting for the next render
+    return () => unsubscribe();
+  }, []);
 
   // function for login
   const login = async (email: string, password: string) => {

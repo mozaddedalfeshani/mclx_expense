@@ -44,7 +44,6 @@ const Register = () => {
         nameRef.current
       ); // Added name parameter
       setIsLoading(false);
-      router.navigate("/Login");
     } catch (error) {
       let msg = "An error occurred";
       Alert.alert("Register", msg);
