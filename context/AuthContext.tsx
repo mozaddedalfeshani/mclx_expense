@@ -3,6 +3,7 @@ import { AuthContextType, UserType } from "@/types";
 import { useRouter } from "expo-router";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
@@ -18,7 +19,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   // use firebase auto check user login or not
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("user", user);
       if (user) {
         setUser({ uid: user.uid, email: user.email, name: user.displayName });
         router.replace("/(tabs)");
@@ -39,6 +41,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return { success: true };
     } catch (err: any) {
       let msg = err.message;
+      console.log("error", err);
+      // (auth/invalid-email)
+      if (err.code === "auth/invalid-email") {
+        msg = "Invalid email address";
+      }
+      // (auth/user-not-found)
+      if (err.code === "auth/user-not-found") {
+        msg = "User not found";
+      }
+      // (auth/wrong-password)
+      if (err.code === "auth/wrong-password") {
+        msg = "Invalid password";
+      }
+
       return { success: false, msg };
     }
   };

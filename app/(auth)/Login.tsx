@@ -9,10 +9,14 @@ import Input from "@/components/Input";
 import * as Icon from "phosphor-react-native";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
+
+  /// first import the hook authcontext
+  const { login: LoginUser } = useAuth();
   // we are using ref instead of useState coz while uesr typing we dont want to re-render the component
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
@@ -20,6 +24,22 @@ const Login = () => {
     if (!emailRef.current || !passwordRef.current) {
       Alert.alert("Login", "Please fill all the fields");
       return;
+    }
+    try {
+      setIsLoading(true);
+      let res = await LoginUser(emailRef.current, passwordRef.current);
+      if (res.success) {
+        router.navigate("/(tabs)");
+      } else {
+        Alert.alert(
+          "Error",
+          res.msg ? res.msg : "Something went wrong, please try again"
+        );
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      Alert.alert("Error", (err as Error).message);
     }
   };
   return (
