@@ -7,18 +7,12 @@ import { verticalScale } from "@/utils/styling";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Button from "@/components/Button";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import { useRouter } from "expo-router";
 const Welcome = () => {
-  const router = useRouter();
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         {/* login button and welcome image */}
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => {
-            router.push("/(auth)/Login");
-          }}>
+        <TouchableOpacity style={styles.loginButton}>
           <Typo fontWeight={500}>Sign in</Typo>
         </TouchableOpacity>
         {/* welcome image  */}
