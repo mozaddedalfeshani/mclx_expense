@@ -9,6 +9,7 @@ import Input from "@/components/Input";
 import * as Icon from "phosphor-react-native";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 const Register = () => {
   const router = useRouter();
@@ -17,6 +18,8 @@ const Register = () => {
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
   const confirmPasswordRef = React.useRef("");
+
+  const { register: registerUser } = useAuth();
 
   const handleSubmit = async () => {
     if (
@@ -32,6 +35,22 @@ const Register = () => {
       Alert.alert("Register", "Passwords do not match");
       return;
     }
+
+    setIsLoading(true);
+    try {
+      await registerUser(
+        emailRef.current,
+        passwordRef.current,
+        nameRef.current
+      ); // Added name parameter
+      setIsLoading(false);
+      router.navigate("/Login");
+    } catch (error) {
+      let msg = "An error occurred";
+      Alert.alert("Register", msg);
+      setIsLoading(false);
+    }
+
     // Add registration logic here
   };
 
