@@ -38,6 +38,8 @@ yarn-error.*
 app-example
 
 config/key.ts
+constants/index.ts
+constants\index.ts
 
 
 
