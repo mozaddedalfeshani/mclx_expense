@@ -23,6 +23,7 @@ import Button from "@/components/Button";
 import { useAuth } from "@/context/AuthContext";
 import { updateUser } from "@/services/userService";
 import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 
 const EditProfile = () => {
   const [userData, setUserData] = useState<UserDataType>({
@@ -39,6 +40,20 @@ const EditProfile = () => {
       image: user?.image || null,
     });
   }, [user]);
+
+  const onPickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images", "videos"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+    if (!result.canceled) {
+      setUserData({ ...userData, image: result.assets[0] });
+    }
+  };
 
   const handleUpdateProfile = async () => {
     const { name, image } = userData;
@@ -77,7 +92,7 @@ const EditProfile = () => {
               style={styles.avatar}
               transition={100}
             />
-            <TouchableOpacity style={styles.editIcon}>
+            <TouchableOpacity style={styles.editIcon} onPress={onPickImage}>
               <Icon.Pen size={verticalScale(20)} color={colors.neutral500} />
             </TouchableOpacity>
           </View>
