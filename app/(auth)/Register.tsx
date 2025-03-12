@@ -17,7 +17,6 @@ const Register = () => {
   const nameRef = React.useRef(""); // Added nameRef
   const emailRef = React.useRef("");
   const passwordRef = React.useRef("");
-  const confirmPasswordRef = React.useRef("");
 
   const { register: registerUser } = useAuth();
 
@@ -25,14 +24,9 @@ const Register = () => {
     if (
       !nameRef.current || // Check if name is provided
       !emailRef.current ||
-      !passwordRef.current ||
-      !confirmPasswordRef.current
+      !passwordRef.current
     ) {
       Alert.alert("Register", "Please fill all the fields");
-      return;
-    }
-    if (passwordRef.current !== confirmPasswordRef.current) {
-      Alert.alert("Register", "Passwords do not match");
       return;
     }
 
@@ -85,12 +79,7 @@ const Register = () => {
             placeholder="Enter Your Password"
             icon={<Icon.Password size={24} color={colors.white} />}
           />
-          <Input
-            secureTextEntry={true}
-            onChangeText={(value) => (confirmPasswordRef.current = value)}
-            placeholder="Confirm Your Password"
-            icon={<Icon.Password size={24} color={colors.white} />}
-          />
+          {/* Removed confirm password input */}
 
           <Button onPress={handleSubmit} loading={isLoading}>
             <Typo size={16} fontWeight={"bold"} color={colors.black}>

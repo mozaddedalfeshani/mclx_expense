@@ -21,14 +21,17 @@ import Input from "@/components/Input";
 import { UserDataType } from "@/types";
 import Button from "@/components/Button";
 import { useAuth } from "@/context/AuthContext";
+import { updateUser } from "@/services/userService";
+import { useRouter } from "expo-router";
 
 const EditProfile = () => {
   const [userData, setUserData] = useState<UserDataType>({
     name: "",
     image: null,
   });
-  const { user } = useAuth();
+  const { user, updateUserData } = useAuth();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setUserData({
@@ -37,14 +40,24 @@ const EditProfile = () => {
     });
   }, [user]);
 
-  const handleUpdateProfile = () => {
+  const handleUpdateProfile = async () => {
     const { name, image } = userData;
+    console.log(userData);
 
     if (!name.trim()) {
       Alert.alert("User", "Please enter your name");
       return; // return is used to stop the execution of the function
     }
-    console.log("Update Profile", name, image);
+    setLoading(true);
+    const res = await updateUser(user?.uid as string, userData);
+    setLoading(false);
+    if (res.success) {
+      updateUserData(user?.uid as string);
+      router.back();
+      Alert.alert("User", "Profile updated successfully");
+    } else {
+      Alert.alert("User", res?.msg);
+    }
   };
   return (
     <ModalWrapper>
